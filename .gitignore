@@ -1,0 +1,11 @@
+# Node Modules
+node_modules
+
+# SASS
+.sass-cache/
+*.css.map
+*.sass.map
+*.scss.map
+
+# VS Code Settings
+.vscode/*
