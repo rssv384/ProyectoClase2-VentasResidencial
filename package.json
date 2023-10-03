@@ -1,11 +1,19 @@
 {
-  "name": "proyectoclase2-ventasresidencial",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.html",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Raúl Soto",
-  "license": "ISC"
+	"name": "proyectoclase2-ventasresidencial",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.html",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"watch:sass": "node-sass assets/scss/styles.scss assets/css/styles.css --output-style expanded --watch",
+		"serve": "live-server",
+		"start": "concurrently  \" npm run watch:sass \" \" npm run serve \" "
+	},
+	"author": "Raúl Soto",
+	"license": "ISC",
+	"devDependencies": {
+		"concurrently": "^8.2.1",
+		"live-server": "^1.2.2",
+		"node-sass": "^9.0.0"
+	}
 }
