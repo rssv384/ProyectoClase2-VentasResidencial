@@ -1,4 +1,5 @@
 //#region MODELO DE DATOS (MODELS)
+
 // Definir la clase RealEstate
 class RealEstate {
 	constructor(
@@ -36,6 +37,7 @@ const house1 = new RealEstate(
 	150,
 	'real-estate-1.jpg'
 );
+
 const house2 = new RealEstate(
 	2,
 	'Casa Beta',
@@ -47,6 +49,7 @@ const house2 = new RealEstate(
 	180,
 	'real-estate-2.jpg'
 );
+
 const house3 = new RealEstate(
 	3,
 	'Casa Teta',
@@ -76,6 +79,8 @@ realEstateList.forEach((item) => {
 //#endregion
 
 //#region VISTA DE LOS MODELOS EN HTML (VIEW)
+
+// Función que controla el despliegue de un array de RealEstate en la tabla, asi como el mensaje a mostrar.
 function displayTable(houses) {
 	clearTable();
 
@@ -95,18 +100,18 @@ function displayTable(houses) {
 				const row = document.createElement('tr');
 
 				row.innerHTML = `
-			  <td> ${house.id} </td>
-			  <td> <img src="${imagePath + house.image}" alt="${
-					house.name
-				}" width="100"> </td>
-			  <td>${house.name}</td>
-			  <td>${house.description}</td>
-			  <td>${house.bedrooms}</td>
-			  <td>${house.bathrooms}</td>
-			  <td>${house.price}</td>
-			  <td>${house.landArea}</td>
-			  <td>${house.constructionArea}</td>
-			`;
+					<td> ${house.id} </td>
+					<td> <img src="${imagePath + house.image}"
+							alt="${house.name}" width="100">
+					</td>
+			  		<td>${house.name}</td>
+					<td>${house.description}</td>
+					<td>${house.bedrooms}</td>
+					<td>${house.bathrooms}</td>
+					<td>${formatCurrency(house.price)}</td>
+					<td>${formatM2(house.landArea)}</td>
+					<td>${formatM2(house.constructionArea)}</td>
+				`;
 
 				tablaBody.appendChild(row);
 			});
@@ -114,33 +119,78 @@ function displayTable(houses) {
 	}, 2000);
 }
 
+// Función que limpia la tabla
 function clearTable() {
 	const tableBody = document.getElementById('data-table-body');
 
 	tableBody.innerHTML = '';
 }
 
+// Función que muestra el mensaje de carga
 function showLoadingMessage() {
-	const messageNotFound = document.getElementById('message-not-found');
+	const message = document.getElementById('message');
 
-	messageNotFound.innerHTML = 'Cargando...';
+	message.innerHTML = 'Cargando...';
 
-	messageNotFound.style.display = 'block';
+	message.style.display = 'block';
 }
 
+// Función que muestra el mensaje de que no se encontraron datos
 function showNotFoundMessage() {
-	const messageNotFound = document.getElementById('message-not-found');
+	const message = document.getElementById('message');
 
-	messageNotFound.innerHTML =
-		'No se encontraron casas con el filtro proporcionado.';
+	message.innerHTML = 'No se encontraron casas con el filtro proporcionado.';
 
-	messageNotFound.style.display = 'block';
+	message.style.display = 'block';
 }
 
+// Función que oculta el mensaje
 function hideMessage() {
-	const messageNotFound = document.getElementById('message-not-found');
+	const message = document.getElementById('message');
 
-	messageNotFound.style.display = 'none';
+	message.style.display = 'none';
+}
+//#endregion
+
+//#region FILTROS (VIEW)
+
+// Funcion que inicializa los eventos de los botones del filto
+function initButtonsHandler() {
+	document.getElementById('filter-form').addEventListener('submit', (event) => {
+		event.preventDefault();
+		applyFilters();
+	});
+}
+
+// Funcion que gestiona la aplicacion del filtro a los datos y su despliegue.
+function applyFilters() {
+	const filterText = document.getElementById('text').value.toLowerCase();
+	const filterBedrooms = parseFloat(document.getElementById('bedrooms').value);
+	const filterMinPrice = parseFloat(document.getElementById('price-min').value);
+	const filterMaxPrice = parseFloat(document.getElementById('price-max').value);
+
+	const filteredHouses = filterHouses(
+		realEstateList,
+		filterText,
+		filterBedrooms,
+		filterMinPrice,
+		filterMaxPrice
+	);
+
+	displayTable(filteredHouses);
+}
+
+// Funcion con la logica para filtrar las casas.
+function filterHouses(houses, text, bedrooms, minPrice, maxPrice) {
+	return houses.filter(
+		(house) =>
+			(!bedrooms || house.bedrooms === bedrooms) &&
+			(!minPrice || house.price >= minPrice) &&
+			(!maxPrice || house.price <= maxPrice) &&
+			(!text ||
+				house.name.toLowerCase().includes(text) ||
+				house.description.toLowerCase().includes(text))
+	);
 }
 
 //#endregion
@@ -148,5 +198,7 @@ function hideMessage() {
 //#region INICIALIZAMOS FUNCIONALIDAD (CONTROLLER)
 
 displayTable(realEstateList);
+
+initButtonsHandler();
 
 //#endregion

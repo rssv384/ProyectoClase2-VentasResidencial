@@ -134,7 +134,7 @@ table {
         max-width: 100px;
         height: auto; }
 
-#message-not-found {
+#message {
   display: none;
   text-align: center;
   font-size: 1rem;
